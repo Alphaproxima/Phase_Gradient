@@ -107,7 +107,7 @@ void Phase_LED(float p){
     if(p>0){
       Status_phipast = 1;
 //      digitalWrite(LED, HIGH);
-      OCR0B = 2;    // Duty ratio
+      OCR0B = 2;    // Duty ratio change
       Status_light = 1;
     }
   }
@@ -115,7 +115,7 @@ void Phase_LED(float p){
     timer_LED++;
     if(timer_LED>time_L){
 //      digitalWrite(LED, LOW);
-      OCR0B = 4;    // デューティ比変更
+      OCR0B = 4;    // Duty ratio change
       Status_light = 0;
       timer_LED = 0;
     }
@@ -139,19 +139,19 @@ void setup() {
   pinMode(SENSOR, INPUT);  
   pinMode(S1, OUTPUT);  
   pinMode(S2, OUTPUT);  
-  // timer 割り込み設定
-  // 詳細は TrinketTimers.pdf を参照
+  // timer interrupt setting
+  // this refers to trinkettimer.pdf
   cli();
-//  TCCR1 |= (0<<CS13) | (1<<CS12) | (0<<CS11) | (0<<CS10);// 1[MHz]→周期1[μs]
-  TCCR0A=0xF3;           // モード設定
-  TCCR0B=0x0A;           // モード設定 1MHz
-  OCR0A = 4;             //OCR0A+1が周期に相当
-  OCR0B = 4;             //デューティ比(OCR0B+1)/(OCR0A+1)
-//  TIMSK = (1 << OCIE0A);  // これにより関数を入れられる
+//  TCCR1 |= (0<<CS13) | (1<<CS12) | (0<<CS11) | (0<<CS10);// 1[MHz]→period 1[μs]
+  TCCR0A=0xF3;           // Mode setting
+  TCCR0B=0x0A;           // Mode setting 1MHz
+  OCR0A = 4;             //OCR0A+1 correspond to cycle
+  OCR0B = 4;             //Duty ratio(OCR0B+1)/(OCR0A+1)
+//  TIMSK = (1 << OCIE0A);  // this allows you to enter function
   
-  TCCR1=0x97;            // ここでモードを設定 125[kHz]
-  OCR1C = 124;            // 1[ms]ごとにISR(TIM1_COMPA_vect) を実行
-  TIMSK = (1 << OCIE1A);  // これにより関数を入れられる
+  TCCR1=0x97;            // this is mode setting 125[kHz]
+  OCR1C = 124;            // Execute ISR every 1 ms
+  TIMSK = (1 << OCIE1A);  // enter to the function
   sei();
 }
 
