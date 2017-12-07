@@ -31,3 +31,14 @@ void Phase_update(){
   phi = Phase_reset(phi);
   Phase_LED(phi);
 }
+
+// Reset phase
+float Phase_reset(float p){
+  float p_out=p;
+  if(p_out>M_PI){
+    p_out = p_out - 2*M_PI;
+    Status_phipast = 0;
+  }
+  return p_out;
+}
+
